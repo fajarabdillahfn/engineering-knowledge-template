@@ -20,19 +20,21 @@ Most engineering knowledge is captured in long, monolithic documents. This makes
 
 This repository is organized in three layers:
 
-- **Specification.** [SPECIFICATION.md](SPECIFICATION.md) defines the rules an EKS-compliant repository must follow. It is normative.
+- **Specification.** [SPECIFICATION.md](SPECIFICATION.md) defines the rules an EKS-compliant repository must follow; [KNOWLEDGE_MODEL.md](KNOWLEDGE_MODEL.md) defines the conceptual model those rules implement. Both are normative.
 - **Methodology.** [HANDBOOK.md](HANDBOOK.md) explains how to adopt and use EKS in practice. [AGENTS.md](AGENTS.md) gives AI coding agents specific guidance. Both are informative.
 - **Reference implementation.** The `knowledge/`, `prompts/`, `examples/`, and `.github/` directories show one possible layout. Repositories MAY organize files differently while remaining EKS-compliant.
 
 ## Getting Started
 
-1. Read [SPECIFICATION.md](SPECIFICATION.md) to understand the rules.
-2. Read [HANDBOOK.md](HANDBOOK.md) to learn the recommended workflow.
-3. If you are an AI coding agent, also read [AGENTS.md](AGENTS.md).
-4. Adopt EKS in your project incrementally — see the Handbook's adoption strategy.
+1. Read [KNOWLEDGE_MODEL.md](KNOWLEDGE_MODEL.md) to understand the conceptual model.
+2. Read [SPECIFICATION.md](SPECIFICATION.md) to understand the rules.
+3. Read [HANDBOOK.md](HANDBOOK.md) to learn the recommended workflow.
+4. If you are an AI coding agent, also read [AGENTS.md](AGENTS.md).
+5. Adopt EKS in your project incrementally — see the Handbook's adoption strategy.
 
 ## Where to Read Next
 
+- [KNOWLEDGE_MODEL.md](KNOWLEDGE_MODEL.md) — the conceptual model.
 - [SPECIFICATION.md](SPECIFICATION.md) — the normative specification.
 - [HANDBOOK.md](HANDBOOK.md) — methodology and best practices.
 - [AGENTS.md](AGENTS.md) — guidance for AI coding agents.

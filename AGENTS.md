@@ -11,14 +11,15 @@ This file describes how an AI agent should navigate and contribute to an EKS kno
 When entering an unfamiliar EKS repository, read the following documents in this order. Stop after each step if it is sufficient to answer the current question; otherwise continue.
 
 1. `README.md` — the project homepage and entry point.
-2. `SPECIFICATION.md` — the normative rules. Read this whenever a conformance question arises.
-3. `HANDBOOK.md` — the methodology and recommended workflow. Read this for guidance on how to adopt and maintain EKS.
-4. `knowledge/README.md` — the structure and intent of the reference knowledge base.
-5. `knowledge/architecture.md` — the system's components, boundaries, and data flow.
-6. `knowledge/glossary.md` — the project's vocabulary and acronym definitions.
-7. `knowledge/flows/` — end-to-end processes that cross service boundaries.
-8. `knowledge/services/` — per-service references for any service involved in the task.
-9. `knowledge/playbooks/` — operational procedures when the task is operational rather than developmental.
+2. `KNOWLEDGE_MODEL.md` — the conceptual model: what a Knowledge Asset is, the asset types, relationships, lifecycle, ownership, and traceability. Read this before navigating the knowledge base.
+3. `SPECIFICATION.md` — the normative rules. Read this whenever a conformance question arises.
+4. `HANDBOOK.md` — the methodology and recommended workflow. Read this for guidance on how to adopt and maintain EKS.
+5. `knowledge/README.md` — the structure and intent of the reference knowledge base.
+6. `knowledge/architecture.md` — the system's components, boundaries, and data flow.
+7. `knowledge/glossary.md` — the project's vocabulary and acronym definitions.
+8. `knowledge/flows/` — end-to-end processes that cross service boundaries.
+9. `knowledge/services/` — per-service references for any service involved in the task.
+10. `knowledge/playbooks/` — operational procedures when the task is operational rather than developmental.
 
 Read additional assets (`conventions.md`, `troubleshooting/`, `decisions/`) on demand, when the task is clearly about conventions, known issues, or historical decisions.
 
