@@ -1,6 +1,6 @@
 # Implement
 
-Prompt template for implementing a well-defined change.
+Reusable prompt for implementing a well-defined change.
 
 ## Purpose
 Translate an approved plan or ticket into code changes that meet the project's conventions and acceptance criteria.

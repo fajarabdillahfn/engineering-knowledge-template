@@ -1,6 +1,6 @@
 # Review
 
-Prompt template for reviewing a change, document, or proposal.
+Reusable prompt for reviewing a change, knowledge asset, or proposal.
 
 ## Purpose
 Produce a structured review that highlights correctness, risk, and alignment with project conventions.

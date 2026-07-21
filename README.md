@@ -2,60 +2,49 @@
 
 A specification for organizing engineering knowledge so that it is usable by humans and by AI coding agents.
 
+## What is EKS
+
+EKS defines a small set of knowledge asset types — Architecture, Service, Flow, Decision, Playbook, Troubleshooting, and Glossary — and the relationships between them. Each asset is scoped to a single concern, making it easier to maintain and easier for automated tools to retrieve.
+
+This repository is the reference implementation of EKS. The specification is normative; the reference implementation demonstrates one possible way to satisfy it.
+
 ## Problem Statement
 
-Most engineering documentation is written for human readers in long, monolithic documents. This creates problems for AI coding agents and, over time, for humans as well:
+Most engineering knowledge is captured in long, monolithic documents. This makes it hard for AI coding agents to retrieve the relevant subset, and hard for humans to keep the knowledge current. EKS addresses this by:
 
-- Long documents exceed the context window of language models and force lossy truncation.
-- Multiple concerns are mixed in a single file: architecture, runbooks, and history are not separated.
-- Documents lack consistent metadata, so retrieval depends on fragile keyword matching.
-- Information drifts from implementation, and there is no signal when a document is stale.
-- Implicit context is left to the reader, which a model cannot infer reliably.
+- Defining a small, fixed set of knowledge asset types.
+- Scoping each asset to a single concern.
+- Specifying the relationships between assets as a graph, not a hierarchy.
 
-The result is that AI agents either ignore the documentation, hallucinate structure, or produce work that contradicts the team's actual practices. Humans face the same retrieval problem, but compensate through experience.
+## Repository Layout
 
-## Goals
+This repository is organized in three layers:
 
-EKS is designed to be useful for three audiences simultaneously:
+- **Specification.** [SPECIFICATION.md](SPECIFICATION.md) defines the rules an EKS-compliant repository must follow. It is normative.
+- **Methodology.** [HANDBOOK.md](HANDBOOK.md) explains how to adopt and use EKS in practice. [AGENTS.md](AGENTS.md) gives AI coding agents specific guidance. Both are informative.
+- **Reference implementation.** The `knowledge/`, `prompts/`, `examples/`, and `.github/` directories show one possible layout. Repositories MAY organize files differently while remaining EKS-compliant.
 
-- **Humans.** Clear, navigable, and easy to keep up to date.
-- **AI Coding Agents.** Structured, retrievable, and unambiguous at the document level.
-- **Future Engineering Teams.** Institutional knowledge that survives turnover and is not locked inside any one person's head.
+## Getting Started
 
-## Core Principles
+1. Read [SPECIFICATION.md](SPECIFICATION.md) to understand the rules.
+2. Read [HANDBOOK.md](HANDBOOK.md) to learn the recommended workflow.
+3. If you are an AI coding agent, also read [AGENTS.md](AGENTS.md).
+4. Adopt EKS in your project incrementally — see the Handbook's adoption strategy.
 
-- **Documentation is retrievable.** Documents are scoped so they can be located by topic, not by guessing.
-- **Knowledge is modular.** Each document covers one concern. Concerns are not interleaved.
-- **Small files over large documents.** A document that grows past its scope is split, not extended.
-- **Metadata before prose.** A document's identity and scope are declared at the top, not buried in text.
-- **Architecture before implementation.** The system is described before any code is referenced.
-- **Business knowledge is first-class documentation.** Domain context is documented with the same discipline as technical context.
+## Where to Read Next
 
-## Repository Structure
+- [SPECIFICATION.md](SPECIFICATION.md) — the normative specification.
+- [HANDBOOK.md](HANDBOOK.md) — methodology and best practices.
+- [AGENTS.md](AGENTS.md) — guidance for AI coding agents.
+- [knowledge/](knowledge/) — the reference knowledge base.
 
-- `knowledge/` — The engineering knowledge base: architecture, glossary, conventions, services, flows, troubleshooting, playbooks, and decisions.
-- `prompts/` — Reusable prompt templates for common engineering workflows: investigate, implement, review, and refactor.
-- `schemas/` — Reserved for document and metadata schemas. Empty in v0.1.
-- `examples/` — Reserved for worked examples of compliant documents. Empty in v0.1.
-- `.github/` — Issue and pull request templates for the project that hosts EKS.
+## Contributing
 
-## Quick Start
-
-To adopt EKS in a new project:
-
-1. Copy this repository (or at minimum the `knowledge/`, `prompts/`, and `.github/` directories) into the target project.
-2. Replace the placeholder content in `knowledge/` with project-specific documentation, one file per concern.
-3. Keep the directory structure intact. Add subdirectories only when a genuinely new document type emerges.
-4. Use the templates in `knowledge/services/`, `knowledge/flows/`, and so on as the starting point for new documents.
-5. Treat `knowledge/` as the source of truth: changes to behavior are followed by changes to the relevant documents.
+Feedback and proposals are welcome through issues and pull requests. See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Roadmap
 
-- **v0.1 — Foundation.** Repository layout, document types, and templates. *Current.*
-- **v0.2 — Metadata Spec.** Required frontmatter and document classification rules.
-- **v0.3 — Validation.** Linting and structural checks for EKS documents.
-- **v1.0 — AI Agent Ecosystem.** Reference agents, retrieval recipes, and tooling integrations.
-
-## Contribution
-
-EKS is expected to evolve. Feedback, corrections, and proposals are welcome through issues and pull requests. Changes to the specification are discussed openly and recorded as ADRs in `knowledge/decisions/`.
+- **v0.1 — Foundation.** Repository layout, asset types, and starter documents. *Current.*
+- **v0.2 — Metadata Spec.** Frontmatter and asset classification.
+- **v0.3 — Validation.** Structural checks for EKS assets.
+- **v1.0 — AI Agent Ecosystem.** Reference agents and tooling.

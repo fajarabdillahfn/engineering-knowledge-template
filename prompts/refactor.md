@@ -1,6 +1,6 @@
 # Refactor
 
-Prompt template for refactoring existing code without changing behavior.
+Reusable prompt for refactoring existing code without changing behavior.
 
 ## Purpose
 Restructure code to improve clarity, reuse, or maintainability while preserving observable behavior.

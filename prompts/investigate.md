@@ -1,6 +1,6 @@
 # Investigate
 
-Prompt template for investigating an issue, question, or unfamiliar area of the codebase.
+Reusable prompt for investigating an issue, question, or unfamiliar area of the codebase.
 
 ## Purpose
 Drive a focused investigation that surfaces evidence, root cause, and next steps without prematurely proposing changes.

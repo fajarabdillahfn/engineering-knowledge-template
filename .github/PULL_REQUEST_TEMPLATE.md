@@ -13,6 +13,6 @@
 <!-- TODO: how the changes were tested and the results -->
 
 ## Checklist
-- [ ] Documentation updated where applicable
+- [ ] Knowledge assets updated where applicable
 - [ ] Follows the conventions in `knowledge/conventions.md`
 - [ ] No secrets or sensitive data included

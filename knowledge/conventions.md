@@ -7,4 +7,4 @@ Engineering conventions and standards adopted by the team.
 - Describe naming patterns for files, services, and identifiers
 - List testing conventions
 - Outline git workflow and commit message format
-- Capture documentation expectations
+- Capture knowledge asset expectations
