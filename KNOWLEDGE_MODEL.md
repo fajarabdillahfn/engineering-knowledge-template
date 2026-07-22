@@ -7,7 +7,7 @@
 | Title | Engineering Knowledge Model |
 | Specification Version | v0.1.0 Draft |
 | Status | Draft |
-| Last Updated | 2026-07-21 |
+| Last Updated | 2026-07-22 |
 | Compatibility | EKS v0.1 |
 | Intended Audience | Authors of EKS implementations, tooling developers, specification reviewers |
 | Companion Document | SPECIFICATION.md |
@@ -59,6 +59,13 @@ A Knowledge Asset has the following conceptual properties:
 ### 3.2 Atomicity
 A Knowledge Asset MUST represent one concept. An asset that grows past its concept SHOULD be split into multiple assets. The corresponding design principle is defined in SPECIFICATION §3.4 (Single Responsibility).
 
+### 3.3 Cross-references and Intentional Duplication
+A Knowledge Asset SHOULD reference other assets where it borrows, depends on, or contextualizes their content.
+
+When the same concept legitimately appears in multiple assets (for example, a design choice mentioned in the Architecture asset, the Decision asset, and a Service asset), the canonical (full) treatment lives in the most specific asset. Other assets mention it briefly and link to the canonical asset. This is intentional duplication, not a violation of atomicity.
+
+An implementation SHOULD support cross-references in a way that allows the relationships to be discovered without requiring human readers to follow the links manually.
+
 ---
 
 ## 4. Asset Types
@@ -67,15 +74,15 @@ EKM defines seven asset types. Each type has a defined purpose, a set of respons
 ### 4.1 Architecture
 **Purpose.** Describes the system as a whole: its components, boundaries, and how data moves between them.
 
-**Responsibilities.** Capturing the highest-level description of the system; serving as the entry point for understanding the system; representing the system to readers who need a high-level overview.
+**Responsibilities.** Capturing the highest-level description of the system; serving as the entry point for understanding the system; representing the system to readers who need a high-level overview; providing operational entry points to the playbooks and troubleshooting entries related to the system.
 
-**Required characteristics.** A single asset per system. The root of the knowledge graph.
+**Required characteristics.** A single asset per system. The root of the knowledge graph. SHOULD include a section or appendix that cross-references the playbooks and troubleshooting entries related to the system, so that operational questions can be answered from the architecture document.
 
-**MUST represent.** The system's components, boundaries, and primary data flows.
+**MUST represent.** The system's components, boundaries, and primary data flows. Operational entry points (cross-references to playbooks and troubleshooting entries).
 
 **MUST NOT represent.** Implementation details, runbook content, troubleshooting details, or incident history.
 
-**Relationships.** Referenced by Service, Flow, Playbook, and Troubleshooting assets. MAY reference Decision assets.
+**Relationships.** Referenced by Service, Flow, Playbook, and Troubleshooting assets. MAY reference Decision, Playbook, and Troubleshooting assets to provide operational entry points.
 
 ### 4.2 Service
 **Purpose.** Describes a single deployable or independently operable unit.
@@ -91,15 +98,15 @@ EKM defines seven asset types. Each type has a defined purpose, a set of respons
 **Relationships.** A child of the Architecture asset. Referenced by Flow, Playbook, and Troubleshooting assets. MAY reference Decision assets.
 
 ### 4.3 Flow
-**Purpose.** Describes an end-to-end process that crosses one or more service boundaries.
+**Purpose.** Describes a coherent end-to-end process. A Flow MAY involve one or more services. Cross-service processes are the most common case; a single-service Flow is permitted when the process is significant enough to warrant its own asset (for example, a request validation pipeline that is central to one service's contract).
 
-**Responsibilities.** Capturing the trigger, steps, outcome, and failure handling of a cross-service process.
+**Responsibilities.** Capturing the trigger, steps, outcome, and failure handling of a process.
 
 **Required characteristics.** Identifies the services involved. Specifies the trigger and the outcome.
 
 **MUST represent.** The trigger, the steps, the outcome, and the failure handling. The services involved.
 
-**MUST NOT represent.** The implementation of any single service in isolation.
+**MUST NOT represent.** The implementation of any single service in isolation. Single-service implementation details belong in the Service asset.
 
 **Relationships.** A child of the Architecture asset. References one or more Service assets. MAY be referenced by Playbook and Troubleshooting assets. MAY reference Decision assets.
 
@@ -127,7 +134,9 @@ EKM defines seven asset types. Each type has a defined purpose, a set of respons
 
 **MUST NOT represent.** One-off operations that are not expected to recur.
 
-**Relationships.** Associated with one or more Service assets. References one or more Flow assets. MAY reference Decision assets.
+**Relationship with Troubleshooting.** A Playbook describes the *procedure* (what to do); a Troubleshooting asset describes the *issue* (what is wrong). The two are complementary: when both exist for the same situation, the Troubleshooting asset SHOULD reference the Playbook from its resolution section, and the Playbook MAY reference the Troubleshooting asset to indicate which known issue it addresses.
+
+**Relationships.** `applies_to` one or more Service assets. References one or more Flow assets. MAY reference Decision assets. MAY reference Troubleshooting assets when the scenario corresponds to a known issue.
 
 ### 4.6 Troubleshooting
 **Purpose.** Describes a known issue, its symptoms, root cause, diagnosis, resolution, and prevention.
@@ -140,7 +149,9 @@ EKM defines seven asset types. Each type has a defined purpose, a set of respons
 
 **MUST NOT represent.** Hypothetical or unresolved issues.
 
-**Relationships.** Associated with one or more Service assets. References one or more Playbook assets. MAY reference Decision assets.
+**Relationship with Playbook.** A Troubleshooting asset describes the *issue* (what is wrong); a Playbook describes the *procedure* (what to do about it). The two are complementary: when both exist for the same situation, the Troubleshooting asset SHOULD reference the Playbook from its resolution section, and the Playbook MAY reference the Troubleshooting asset to indicate which known issue it addresses.
+
+**Relationships.** `applies_to` one or more Service assets. References one or more Playbook assets. MAY reference Decision assets. MAY `caused_by` one or more Decision or Architecture assets when the issue exists because of a documented design choice.
 
 ### 4.7 Glossary
 **Purpose.** Defines terms, acronyms, and domain vocabulary used across other EKS assets.
@@ -152,6 +163,8 @@ EKM defines seven asset types. Each type has a defined purpose, a set of respons
 **MUST represent.** Terms that have a non-obvious or project-specific meaning.
 
 **MUST NOT represent.** Terms with standard, widely-known meanings.
+
+**Relationship with other assets.** A Glossary term MAY also be the subject of another asset (for example, "Read-Through Cache" might be defined in the Glossary and be the subject of a Decision asset about the cache strategy). In that case, the Glossary entry is a quick reference; the full treatment lives in the asset. The Glossary is a quick lookup, not the source of truth.
 
 **Relationships.** Orthogonal to the asset hierarchy. Referenced by any asset that uses specialized vocabulary.
 
@@ -202,7 +215,28 @@ The source asset replaces the target asset.
 
 **Example.** A Decision asset v2 supersedes a Decision asset v1.
 
-### 5.7 Implementation
+### 5.7 caused_by
+The source asset exists as a result of the target asset's design or behavior.
+
+**Semantics.** The target asset is the cause of the source asset's existence. If the target asset changes in a way that affects the cause, the source asset SHOULD be revalidated.
+
+**Example.** A Troubleshooting asset is `caused_by` a Decision asset whose design creates the failure mode the troubleshooting entry addresses. A Troubleshooting asset is `caused_by` an Architecture asset when the system's high-level design is the root cause.
+
+### 5.8 replaced_by
+The source asset has been replaced by the target asset. This is the inverse of `supersedes` (§5.6).
+
+**Semantics.** When a `supersedes` relationship is added from a new asset to an old asset, a corresponding `replaced_by` relationship SHOULD be added from the old asset to the new asset. This enables backward navigation from deprecated assets to their replacements.
+
+**Example.** An old Decision asset v1 is `replaced_by` a new Decision asset v2.
+
+### 5.9 applies_to
+The source asset describes scenarios, procedures, or issues that manifest in the target asset.
+
+**Semantics.** The source asset is operationally relevant to the target. This is distinct from `references` (generic mention) and `relates_to` (catch-all). Use `applies_to` when the source asset's primary purpose is to describe how to handle, mitigate, or diagnose something that affects the target.
+
+**Example.** A Playbook asset `applies_to` a Service asset. A Troubleshooting asset `applies_to` a Service asset. A Playbook `applies_to` the services involved in the operational scenario it covers.
+
+### 5.10 Implementation
 An EKS implementation MAY represent relationships in any format, including file references, graph edges, metadata fields, or links in the asset body. The representation MUST keep the relationships discoverable.
 
 ---
