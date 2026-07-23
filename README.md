@@ -46,7 +46,16 @@ Feedback and proposals are welcome through issues and pull requests. See [CONTRI
 
 ## Roadmap
 
-- **v0.1 — Foundation.** Repository layout, asset types, and starter documents. *Current.*
-- **v0.2 — Metadata Spec.** Frontmatter and asset classification.
-- **v0.3 — Validation.** Structural checks for EKS assets.
-- **v1.0 — AI Agent Ecosystem.** Reference agents and tooling.
+**Completed work** (captured here for context, not a release target):
+
+- **Foundation.** Repository layout, asset types, and starter documents.
+- **First dogfooding** (URL Shortener, fictional). Surfaced 10 findings (F1–F10); the high-priority ones (`caused_by`, `replaced_by`, `applies_to`, etc.) are now in the spec.
+- **Agent-readability validation.** A fresh sub-agent navigates the URL Shortener reference using only its asset graph. The initial test (Q6: 4 hops, Q7: 3 hops) revealed a spec-vs-reality gap (F11). F11 retrofit dropped both to 2 hops. The test is in `reference/AGENT_READABILITY_TEST.md`.
+- **Second dogfooding** (`controlroom-inquiry`, real Go+gRPC bill payment service). Surfaced 6 findings (F15–F20). Validates the F13 `out_of_scope` construct (5 explicit non-decisions in one service) and surfaces the F15 federation gap.
+- **Metadata design proposal.** 5 conceptual fields proposed in `METADATA_DESIGN.md`. Adoption deferred until the second dogfooding validates the design — which it did.
+
+**Forward-looking work:**
+
+- **v0.2 — Metadata Spec.** Adopt the conceptual metadata fields from `METADATA_DESIGN.md` into `KNOWLEDGE_MODEL.md`. Apply to existing reference projects.
+- **v0.3 — Validation Gate.** The agent-readability test (`reference/AGENT_READABILITY_TEST.md`) becomes the reference validation procedure. Every spec change SHOULD pass this test before adoption. The URL Shortener and `controlroom-inquiry` references are the test fixtures.
+- **v1.0 — Reference Implementations.** Additional dogfooding projects (real and fictional) exercise the spec under different conditions. New asset types, relationship types, and conceptual refinements emerge from the findings. CLI and tooling MAY be added if they serve the validation discipline; they are not primary deliverables.
