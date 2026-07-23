@@ -1,3 +1,18 @@
+---
+status: Accepted
+last_validated: 2026-07-23
+owner: platform-team
+scope: system
+out_of_scope:
+  - Authentication (handled by api-gateway, not this service)
+  - Rate limiting at service layer (caller's responsibility)
+  - Built-in circuit breaker (planned at switch level, not this service)
+  - Caching of the routing table (Postgres queried on every request)
+  - VOUCHER product type implementation (schema exists, not implemented)
+  - Per-vendor retry policy customization (uniform policy across all vendors)
+  - Direct client exposure (api-gateway is the only caller)
+---
+
 # Architecture
 
 The `controlroom-inquiry` service is the bill-inquiry component of AyoPop's payment platform. It receives inquiry requests from `api-gateway`, resolves the appropriate vendor, calls the vendor over gRPC, and returns the bill details (customer name, amount, validity, product info) to the caller.

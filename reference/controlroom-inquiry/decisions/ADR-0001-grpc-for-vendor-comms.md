@@ -1,3 +1,15 @@
+---
+status: Accepted
+last_validated: 2026-07-23
+owner: platform-team
+scope: decision:vendor-communication
+out_of_scope:
+  - Per-vendor retry policy customization (uniform policy across all vendors is the current design)
+  - Per-vendor circuit breaker (planned but not implemented; see F18)
+  - Translation layer for non-gRPC vendors (assumed to be a separate adapter service)
+  - Authentication in code (handled at the network layer via mTLS or service mesh)
+---
+
 # ADR-0001: Use gRPC for vendor communication
 
 ## Status

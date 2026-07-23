@@ -1,3 +1,22 @@
+---
+status: Accepted
+last_validated: 2026-07-23
+owner: platform-team
+scope: decision:vendor-interface
+out_of_scope:
+  - Generic vendor abstraction (rejected in this ADR)
+  - Per-vendor field sharing (each adapter owns its own request/response types)
+  - Runtime vendor selection (selection is deterministic per product code)
+  - Compile-time shape guarantee across vendors (enforced by convention and tests, not by the type system)
+---
+
+<!--
+NOTE: This ADR was reverse-engineered from existing code, not recorded from a prior decision.
+See FINDINGS.md F16. The "rationale" sections are the doc-writer's hypothesis about why the
+code is shaped this way, not a verbatim record. A confidence field for ADRs is a future
+enhancement per the F16 proposal in HANDBOOK.md.
+-->
+
 # ADR-0002: Per-vendor interface instead of a generic vendor abstraction
 
 ## Status
