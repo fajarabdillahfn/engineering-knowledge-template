@@ -35,3 +35,8 @@ build/
 .fseventsd/
 .Spotlight-V100/
 .Trashes/
+
+# Local working files (paste artifacts, scratch outputs)
+output.txt
+scratch/
+*.scratch
