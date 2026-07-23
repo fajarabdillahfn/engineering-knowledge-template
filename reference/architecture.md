@@ -33,8 +33,30 @@ The details are in `flows/url-shortening.md` and `flows/url-redirection.md`.
 - The read path is high-traffic and latency-sensitive. p99 latency target: 50ms.
 - The analytics path is asynchronous. It is allowed to lag by up to 60 seconds.
 
+## Operational Concerns
+
+For operational questions — what to do when something breaks, why the system is shaped the way it is — start here before reading individual assets. Each entry points to the asset that has the full answer.
+
+### Latency or error spikes on the read path
+
+- **Elevated redirect latency (p99 above 100ms).** See `troubleshooting/elevated-redirect-latency.md`. The most common cause is a cache miss storm.
+- **Cache miss storm in progress (hit rate below 50% for 2+ minutes).** See `playbooks/cache-stampede-mitigation.md`. Engage request coalescing, warm hot keys, monitor until recovered.
+
+### Data store failure
+
+- **Postgres unavailable.** The redirect path returns HTTP 503. The write path also fails. There is no automated fallback; clients retry. See `flows/url-redirection.md` for the documented failure handling. No dedicated playbook exists for this scenario — it has not been a production issue to date.
+- **Redis unavailable.** The redirect path falls through to Postgres on every request. Functionally this is a cache stampede; follow the playbook above.
+- **Message queue unavailable.** The redirect path logs and drops click events. Users are still redirected. Analytics lags but does not fail.
+
+### Why the system is shaped this way
+
+- **Why base62 short codes?** See `decisions/ADR-0001-base62-short-codes.md`.
+- **Why read-through cache with 1-hour TTL?** See `decisions/ADR-0002-read-through-cache.md`.
+
 ## Relationships
 
 - This asset is referenced by every other knowledge asset in the project.
 - `references` `decisions/ADR-0001-base62-short-codes.md` (short code generation strategy).
 - `references` `decisions/ADR-0002-read-through-cache.md` (cache strategy).
+- `references` `troubleshooting/elevated-redirect-latency.md` (operational concerns: latency symptoms and diagnosis).
+- `references` `playbooks/cache-stampede-mitigation.md` (operational concerns: cache miss storm recovery).
