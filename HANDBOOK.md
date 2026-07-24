@@ -172,3 +172,48 @@ The repository that contains this handbook is itself a reference implementation 
 A repository adopting EKS is NOT required to use this layout. The specification defines concepts and requirements; the reference implementation shows one way to satisfy them. Other layouts that satisfy the Conformance requirements (§6 of the specification) are equally valid.
 
 When in doubt about whether a layout choice is acceptable, check the specification's Conformance and Repository Structure sections rather than mirroring this repository.
+
+---
+
+## 13. Cross-Repository Navigation
+
+Real systems are usually federations: a single service is one piece of a larger platform, with sibling services in other repositories, upstream gateways, and downstream vendors. EKS knowledge bases do not need to document the whole federation — each knowledge base is for one service. But the architecture document of each service SHOULD acknowledge its place in the larger system and point to the related knowledge bases.
+
+When writing an architecture document for a service that has sibling or upstream services in other repositories:
+
+- **Acknowledge the service's place in the larger system.** The first paragraph of the architecture document SHOULD mention the upstream caller (e.g., `api-gateway`), the sibling services (e.g., `controlroom-payment`), and the downstream dependencies (e.g., vendor gRPC services).
+- **Reference other services by name and by repository.** The cross-reference is a placeholder; an EKS implementation MAY resolve it to navigate to the related knowledge base. The spec does not require a global index or registry.
+- **Do not attempt to document the entire federation in your service's knowledge base.** The risk is duplication, drift, and the loss of a single source of truth. Each service is the source of truth for itself; cross-references point to the other sources of truth.
+- **For services that are not yet documented in EKS,** the cross-reference is a TODO. Note it as such and move on. A placeholder is better than no mention.
+
+The cost of not cross-referencing is that the architecture document becomes myopic — useful only to engineers working on the service in isolation, not to engineers trying to understand how the system fits together.
+
+See FINDINGS F15 (in the controlroom-inquiry dogfooding) for the originating finding and the agent-readability implications.
+
+---
+
+## 14. ADR Confidence Levels
+
+ADRs can be written at three different points in a project's life. The point at which an ADR is written affects the epistemic strength of its "rationale" sections, and the difference should be acknowledged in the ADR itself.
+
+- **Recorded.** The ADR is written at or near the time the decision is made. The "Context" section reflects the actual considerations, the "Decision" section is the actual choice, and the "Consequences" section captures the trade-offs as understood at the time. **Confidence: high.**
+- **Inferred.** The ADR is written after the fact, by reading existing code and reconstructing the reasoning. The "Context" and "Consequences" sections are the doc-writer's hypothesis about why the code is shaped this way, not a verbatim record of what was decided. **Confidence: medium.** The "Decision" section may be accurate (the code shows what was chosen) but the rationale is reconstructed.
+- **Unverified.** The ADR is written for a hypothetical or aspirational decision — code that does not exist yet, or code that is about to change. **Confidence: low.** The ADR is a proposal, not a record.
+
+An ADR SHOULD declare its confidence level explicitly. A simple frontmatter field (`confidence: recorded | inferred | unverified`) is sufficient. The reader can then weight the ADR's "rationale" sections accordingly.
+
+When writing an inferred ADR, the doc-writer SHOULD:
+
+- Note the inference in the body of the ADR (for example, an HTML comment: `<!-- This rationale is inferred from the code, not recorded from a prior decision. -->`).
+- Cross-reference the source of the inference (which code files or commit messages were read).
+- Mark the ADR for follow-up: if the original decision-maker is available, ask them to confirm or correct the rationale.
+
+When reading an ADR, the reader SHOULD:
+
+- Note the confidence level before weighing the rationale.
+- Treat inferred and unverified ADRs as hypotheses, not records.
+- Not let an inferred ADR be used to defend a design choice that the original author never actually defended.
+
+The reverse-engineering methodology is sometimes the only available option for legacy systems, but it is not equivalent to recording. The distinction is the difference between a hypothesis to be tested and a fact to be trusted.
+
+See FINDINGS F16 (in the controlroom-inquiry dogfooding) for the originating finding and the example of an inferred ADR (the per-vendor-interface decision).
