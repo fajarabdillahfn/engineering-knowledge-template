@@ -38,3 +38,21 @@ Read additional assets (`conventions.md`, `troubleshooting/`, `decisions/`) on d
 - **Reference assets.** When a claim depends on a knowledge asset, cite it by relative path and section. When a claim depends on code, cite file and line.
 - **Distinguish asset from code.** If a knowledge asset and implementation disagree, name both. Do not silently rewrite one to match the other.
 - **Propose, do not silently change.** Suggestions to `knowledge/` should be presented as proposed edits with rationale, not applied without review.
+
+## Using Metadata
+
+Knowledge assets MAY carry metadata at the top of the file (YAML frontmatter, JSON sidecar, or other implementation-specific format). The metadata is part of the asset, not separate from it. When the agent opens an asset, the metadata should be read alongside the body. The schema proposed in `METADATA_DESIGN.md` defines 5 conceptual fields, all of which are signals to the agent:
+
+- **`status`** — the asset's lifecycle state (`Draft`, `Review`, `Accepted`, `Deprecated`, `Archived`). Use this to weigh the asset's authority. An `Accepted` asset is current; a `Deprecated` asset is for context only.
+- **`last_validated`** — the date the asset was last confirmed to reflect the system. A 2-year-old "validated" date is less trustworthy than yesterday's.
+- **`owner`** — the team or individual accountable for the asset. If the asset is wrong, this is who to ask.
+- **`scope`** — what part of the system the asset describes. Use this to know whether the asset is relevant to the current question.
+- **`out_of_scope`** — a list of things the asset explicitly does NOT cover. **This is the highest-leverage field for navigation.** When a question matches an `out_of_scope` entry, the answer may be in the field directly.
+
+**The `out_of_scope` field is specifically designed for "what is this NOT?" questions.** If a new engineer asks "does this service authenticate the caller?" and the architecture document's `out_of_scope` field says `Authentication (handled by api-gateway, not this service)`, that is the answer. The agent SHOULD cite the field directly.
+
+The `out_of_scope` field has been empirically validated: applying it to 3 assets in the controlroom-inquiry knowledge base reduced the agent's hop count by 33% across a 10-question test, and brought the worst case from 4 hops to 3. The field is the most cost-effective metadata for navigation; the others are signals but not shortcuts.
+
+**Tolerate the format.** The metadata is conceptual, not format-specific. The 5 fields above are required or optional per `METADATA_DESIGN.md`, but an implementation MAY choose any representation (YAML frontmatter, JSON, sidecar file, graph database). The agent SHOULD parse whatever representation the project uses and treat the fields semantically. Do not assume the metadata is missing just because the representation is unfamiliar.
+
+See `reference/controlroom-inquiry/AGENT_READABILITY_TEST_2.md` for the test methodology and results that motivated this section.
