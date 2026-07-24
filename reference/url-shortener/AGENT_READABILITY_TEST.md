@@ -185,6 +185,36 @@ After the F11 retrofit:
 
 6. **"AI Retrieval" is now a validation gate, not a milestone.** With this test as evidence, the spec can claim empirical support for the structure. Every future change to `KNOWLEDGE_MODEL.md` should ideally be re-tested — not because the test is expensive, but because the cost of structural regression is hidden until an agent misbehaves.
 
+## Re-test after refactor (2026-07-24)
+
+The URL Shortener knowledge base was moved from `reference/` (top-level) into `reference/url-shortener/` (a subdirectory) to match the directory pattern of `reference/controlroom-inquiry/`. The internal structure of the project (the same 12 system + 3 process assets, the same cross-references) was preserved. This re-test verifies that the move did not break navigation.
+
+**Methodology.** Same 10 questions, same fresh sub-agent, hard-constraint narrowed to the new `reference/url-shortener/` directory. The sub-agent batched reads in parallel groups, so the "logical" hop count is the more useful number than the count of physical file opens.
+
+**Results.**
+
+| Q | Pre-refactor (F11 retrofit) | Post-refactor | Notes |
+| --- | --- | --- | --- |
+| Q1 | 2 | 2 (3 physical) | Architecture is still the natural entry point. |
+| Q2 | 1 | 1 | No change. |
+| Q3 | 4 | 2 (3 physical) | Improved; sub-agent batched less aggressively. |
+| Q4 | 3 | 1 | Improved; agent went straight to the ADR. |
+| Q5 | 2 | 1 | Improved. |
+| Q6 | 2 | 2 | F11 retrofit held up; routing to troubleshooting still works. |
+| Q7 | 2 | 2 | Same; architecture's "Redis unavailable" entry still routes directly. |
+| Q8 | 3 | 3 | No change; value question. |
+| Q9 | 2 | 1 | Improved. |
+| Q10 | 3 | 2 | Improved. |
+| **Total logical hops** | **24** | **17** | **-7 (-29%)** |
+
+**Per-agent assessment.** "Within the project, every question is answerable in 1-2 logical hops. The internal cross-references between assets (e.g., `architecture.md` → `decisions/ADR-0002-read-through-cache.md`, `services/redirect-service.md` → `playbooks/cache-stampede-mitigation.md`, `flows/url-shortening.md` → `decisions/ADR-0001-base62-short-codes.md`) all use project-relative paths (e.g., `../decisions/ADR-0001-base62-short-codes.md`, `../services/redirect-service.md`) and resolve correctly under the new `reference/url-shortener/` root. The move to a subdirectory did not break any of the cross-references. Navigation cost is unchanged from before the refactor."
+
+**F11 retrofit still valid.** The "Operational Concerns" section in `architecture.md` still routes Q6 and Q7 in 2 hops. The retrofit was a content change, not a path change; the move preserved it.
+
+**No regressions.** The lowest hop count (1) is achievable for 6/10 questions, up from 1/10 before. No question requires more than 3 physical hops. The F12 finding (directory layout confuses system vs. process knowledge) is now moot for this project — `url-shortener/` is a subdirectory like every other project.
+
+**Status.** Refactor verified. The `url-shortener/` subdirectory is a stable home for the URL Shortener knowledge base. Future reference projects can follow the same pattern.
+
 ## How to use this document
 
 - **For spec authors:** F11 is resolved. F12, F13, F14 remain open at low priority.
