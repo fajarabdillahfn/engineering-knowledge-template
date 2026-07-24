@@ -5,7 +5,7 @@
 - **Date:** 2026-07-23
 - **Status:** Design proposal. Not yet adopted into `KNOWLEDGE_MODEL.md`.
 - **Scope:** Defines the conceptual metadata fields an EKS implementation MUST or SHOULD support. Does NOT define serialization format.
-- **Driver:** `reference/AGENT_READABILITY_TEST.md` — the test surfaced gaps that current EKS concepts do not address (specifically: freshness, scope, and explicit non-decisions).
+- **Driver:** `reference/url-shortener/AGENT_READABILITY_TEST.md` — the test surfaced gaps that current EKS concepts do not address (specifically: freshness, scope, and explicit non-decisions).
 - **Relationship to spec:** Proposes additions to `KNOWLEDGE_MODEL.md` sections 6–8. Three of the five fields below are NEW concepts; two formalize existing concepts.
 
 ## Context

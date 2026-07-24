@@ -84,11 +84,11 @@ The sub-agent did not know this was a test of EKS — it was framed as a new eng
 
 **Category:** Spec-vs-reality gap.
 
-**Problem.** F9 said architecture documents SHOULD cross-reference playbooks and troubleshooting entries. The fix is in `KNOWLEDGE_MODEL.md` §4.1. But the URL Shortener's `reference/architecture.md` did not include this cross-reference. Q6 and Q7 cost 3-4 hops.
+**Problem.** F9 said architecture documents SHOULD cross-reference playbooks and troubleshooting entries. The fix is in `KNOWLEDGE_MODEL.md` §4.1. But the URL Shortener's `reference/url-shortener/architecture.md` did not include this cross-reference. Q6 and Q7 cost 3-4 hops.
 
 **Evidence (initial test).** Sub-agent's Q6 navigation: `troubleshooting/elevated-redirect-latency.md` → `playbooks/cache-stampede-mitigation.md` → `ADR-0002` → `architecture.md`. A direct pointer from `architecture.md` to the troubleshooting entry would have made this 2 hops.
 
-**Resolution (2026-07-23).** Added a new "Operational Concerns" section to `reference/architecture.md` with three subsections (latency/error spikes, data store failure, why-the-system-is-shaped-this-way). Each entry points to the asset that has the full answer. Also updated the Relationships section to add `references` to the operational assets. Re-test confirmed the hop count reduction. See "Re-test results" below.
+**Resolution (2026-07-23).** Added a new "Operational Concerns" section to `reference/url-shortener/architecture.md` with three subsections (latency/error spikes, data store failure, why-the-system-is-shaped-this-way). Each entry points to the asset that has the full answer. Also updated the Relationships section to add `references` to the operational assets. Re-test confirmed the hop count reduction. See "Re-test results" below.
 
 ### F12: Directory structure conflates system knowledge with process knowledge
 
@@ -128,7 +128,7 @@ The sub-agent did not know this was a test of EKS — it was framed as a new eng
 
 ## Re-test results (2026-07-23)
 
-After applying the F11 fix (added "Operational Concerns" section to `reference/architecture.md`), all 10 questions were re-run with a fresh sub-agent.
+After applying the F11 fix (added "Operational Concerns" section to `reference/url-shortener/architecture.md`), all 10 questions were re-run with a fresh sub-agent.
 
 ### Q6 hop count: 4 → 2
 
@@ -173,7 +173,7 @@ After the F11 retrofit:
 
 ## Implications for the rest of the plan
 
-1. **F11 retrofit is now done.** The fix to `reference/architecture.md` was small and effective. Re-test confirmed hop count dropped from 4 to 2 for Q6 and from 3 to 2 for Q7.
+1. **F11 retrofit is now done.** The fix to `reference/url-shortener/architecture.md` was small and effective. Re-test confirmed hop count dropped from 4 to 2 for Q6 and from 3 to 2 for Q7.
 
 2. **F12 and F13 are low-priority but real.** The directory layout issue and the "explicit non-decision" gap should be noted for the second dogfooding. If `controlroom-inquiry` surfaces more cases of "we explicitly do not do X" or "where is the system-knowledge/process-knowledge boundary," they should be addressed then.
 
